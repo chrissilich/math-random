@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+
+ul.numberline {
+	position: relative;
+	width: 80%;
+	margin-left: 10%;
+	border-top: 1px solid black;
+	height: 200px;
+	margin-top: 50px;
+}
+
+
+ul.numberline div.marker {
+	position: absolute;
+	display: block;
+	border-left: 1px solid black;
+	width: 0px;
+	height: 10px;
+}
+
+ul.numberline div.marker.full-min {
+	left: 0%;
+}
+ul.numberline div.marker.min {
+	left: 25%;
+}
+ul.numberline div.marker.mid {
+	left: 50%;
+}
+ul.numberline div.marker.max {
+	left: 75%;
+}
+ul.numberline div.marker.full-max {
+	left: 100%;
+}
+ul.numberline div.marker span {
+	position: absolute;
+	transform: translate(-50%, 10px);
+}
+
+ul.numberline li {
+	position: absolute;
+	top: 50px;
+	display: block;
+	border-left: 1px solid black;
+	width: 0px;
+	height: 10px;
+}
+
+ul.numberline li span {
+	font-size: 8pt;
+	position: absolute;
+	top: 20px;
+	transform-origin: 0 50%;
+	transform: rotate(90deg);
+}
