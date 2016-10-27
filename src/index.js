@@ -12,27 +12,35 @@ class MathRandom extends React.Component {
 		this.handleClear = this.handleClear.bind(this);
 		this.handleMultChange = this.handleMultChange.bind(this);
 		this.handleAddChange = this.handleAddChange.bind(this);
+		this.instructionsPrev = this.instructionsPrev.bind(this);
+		this.instructionsNext = this.instructionsNext.bind(this);
 		this.state = {
-			items: [],
+			step: 1,
 			randoms: [], 
 			addNumber: 0,
 			multNumber: 1,
 		};
+		this.handleRandomize();
 	}
 
 	render() {
 		return (
-			<div>
+			<div className={"step"+this.state.step}>
 				<h1>Math.random() Visualizer</h1>
+				<Instructions step={this.state.step} prev={this.instructionsPrev} next={this.instructionsNext} />
+				
 				<form onSubmit={this.handleSubmit}>
-					<p>Add to Math.random() to move the range up. This number is sort of like a minimum.</p>
-					<input onChange={this.handleAddChange} value={this.state.addNumber} />
-					<p>Multiply by Math.random() to expand the range.</p>
-					<input onChange={this.handleMultChange} value={this.state.multNumber} />
-					<button onClick={this.handleRandomize}>Generate ten new random numbers!</button>
-					<button onClick={this.handleClear}>Clear!</button>
+					<Code addNumber={this.state.addNumber} multNumber={this.state.multNumber} />
+					<p className="colourable sometimes-hidden step2 step4">
+						Added number: <input id="addNumber" onChange={this.handleAddChange} value={this.state.addNumber} />
+					</p>
+					<p className="colourable sometimes-hidden step3 step4">
+						Multiplier: <input onChange={this.handleMultChange} value={this.state.multNumber} />
+					</p>
+					<button className="button button-more" onClick={this.handleRandomize}>Generate ten more random numbers!</button>
+					<button className="button button-clear" onClick={this.handleClear}>Clear!</button>
 				</form>
-				<Code addNumber={this.state.addNumber} multNumber={this.state.multNumber} />
+				<div className="clearfix"></div>
 				<NumberLine items={this.state.randoms} addNumber={this.state.addNumber} multNumber={this.state.multNumber} />
 				<EquationList items={this.state.randoms} addNumber={this.state.addNumber} multNumber={this.state.multNumber} />
 			</div>
@@ -40,30 +48,111 @@ class MathRandom extends React.Component {
 	}
 
 	handleRandomize(e) {
-		e.preventDefault();
-		this.setState({randoms: this.state.randoms.concat([
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-			Math.random(),
-		])});
+		try {e.preventDefault();} catch(e) {}
+		for (var i = 0; i < 1000; i += 100) {
+			setTimeout(function(that) { 
+				that.setState({randoms: that.state.randoms.concat([Math.random()])}); 
+			}, i, this);
+		};		
 	}
+
 	handleClear(e) {
-		e.preventDefault();
+		try {e.preventDefault();} catch(e) {}
 		this.setState({randoms: []});
 	}
 	handleMultChange(e) {
-		console.log("new mutliplier:", e.target.value);
 		this.setState({multNumber: e.target.value});
+		// this.handleClear();
+		// this.handleRandomize();
 	}
 	handleAddChange(e) {
 		this.setState({addNumber: e.target.value});
+		// this.handleClear();
+		// this.handleRandomize();
+	}
+	instructionsPrev(e) {
+		e.preventDefault();
+		this.setState({addNumber: 0, multNumber: 1});
+		this.setState({step: this.state.step-1});
+	}
+	instructionsNext(e) {
+		e.preventDefault();
+		this.setState({addNumber: 0, multNumber: 1});
+		this.setState({step: this.state.step+1});
+	}
+}
+
+
+
+class Instructions extends React.Component {
+	render() {
+		const prev = (
+			<button className="button button-back" onClick={this.props.prev}>&lt; Back</button>
+		);
+		const next = (
+			<button className="button button-next" onClick={this.props.next}>Next &gt;</button>
+		);
+		
+		if (this.props.step === 1) {
+
+			return (
+				<div className="instructions">
+					<h2>
+						1. Introduction
+					</h2>
+					<p>
+						<pre>Math</pre> is a class in Javascript full of useful methods that help with math related things.
+					</p>
+					<p>
+						<pre>random</pre> is a method of the <pre>Math</pre> class for generating random numbers.
+					</p>
+					<p>
+						So <pre>Math.random()</pre> generates a random number between 0 and 1. That's all it does.
+					</p>
+					{next}
+				</div>
+			);
+		} else if (this.props.step === 2) {
+			return (
+				<div className="instructions">
+					<h2>
+						2. What about not starting at zero?
+					</h2>
+					<p>Add to <pre>Math.random()</pre> to move the range up. This number is sort of like a minimum.</p>
+					{prev}
+					{next}
+				</div>
+			);			
+		} else if (this.props.step === 3) {
+			return (
+				<div className="instructions">
+					<h2>
+						3. What about a bigger range?
+					</h2>
+					<p>Multiply <pre>Math.random()</pre> by another number to increase the range.</p>
+					{prev}
+					{next}
+				</div>
+			);			
+		} else if (this.props.step === 4) {
+			return (
+				<div className="instructions">
+					<h2>
+						4. Put it all together.
+					</h2>
+					<p>
+						Use the added number to set the minimum, and the multiplied number to set the range of the randomly generated numbers.
+					</p>
+					<p>
+						Together, they should allow you to request a random number in any range you want.
+					</p>
+					{prev}
+				</div>
+			);			
+		}
+		return (
+			<div className="instructions"></div>
+		);
 	}
 }
 
@@ -74,7 +163,7 @@ class Code extends React.Component {
 	render() {
 		return (
 			<h2>
-				{this.props.addNumber} + Math.random() * {this.props.multNumber}
+				<span className="colourable sometimes-hidden step2 step4">{this.props.addNumber} + </span> Math.random() <span className="sometimes-hidden step3 step4"> * {this.props.multNumber}</span>
 			</h2>
 		);
 	}
@@ -89,10 +178,10 @@ class EquationList extends React.Component {
 			<ul className="equations">
 				{this.props.items.map(item => (
 					<li>
-						<span class="add">{this.props.addNumber} + </span>
-						<span class="rand">{item}  * </span>
-						<span class="mult">{this.props.multNumber} = </span>
-						<span class="total">{parseFloat(this.props.addNumber) + parseFloat(item) * parseFloat(this.props.multNumber)}</span>
+						<span className="colourable sometimes-hidden step2">{this.props.addNumber} + </span>
+						<span> {item} </span>
+						<span className="colourable sometimes-hidden step3"> * {this.props.multNumber}</span>
+						<span className="sometimes-hidden step2 step3 step4"> = {parseFloat(this.props.addNumber) + parseFloat(item) * parseFloat(this.props.multNumber)}</span>
 					</li>
 				))}
 			</ul>

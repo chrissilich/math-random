@@ -4,6 +4,80 @@ body {
   font-family: sans-serif;
 }
 
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
+
+.sometimes-hidden {
+	display: none;
+}
+
+.step1 .sometimes-hidden.step1 {
+	display: inline-block;
+}
+
+.step2 .sometimes-hidden.step2 {
+	display: inline-block;
+}
+
+.step3 .sometimes-hidden.step3 {
+	display: inline-block;
+}
+
+.step4 .sometimes-hidden.step4 {
+	display: inline-block;
+}
+
+.colourable.step2 {
+	color: green;
+}
+
+.colourable.step3 {
+	color: blue;
+}
+
+
+.instructions, 
+form {
+	position: relative;
+	float: left;
+	width: 35%;
+	height: 400px;
+	background-color: #eee;
+	padding: 2%;
+	margin: 20px 5%;
+}
+
+.instructions pre {
+	display: inline-block;
+	font-size: 1.4em;
+}
+
+.instructions .button,
+form .button {
+	position: absolute;
+	bottom: 20px;
+}
+.instructions .button-back,
+form .button-more {
+	left: 20px;
+}
+.instructions .button-next,
+form .button-clear {
+	right: 20px;
+}
+
 
 ul.numberline {
 	position: relative;
@@ -21,6 +95,7 @@ ul.numberline div.marker {
 	border-left: 1px solid black;
 	width: 0px;
 	height: 10px;
+	top: -10px;
 }
 
 ul.numberline div.marker.full-min {
@@ -40,12 +115,12 @@ ul.numberline div.marker.full-max {
 }
 ul.numberline div.marker span {
 	position: absolute;
-	transform: translate(-50%, 10px);
+	transform: translate(-50%, -20px);
 }
 
 ul.numberline li {
 	position: absolute;
-	top: 50px;
+	top: 0px;
 	display: block;
 	border-left: 1px solid black;
 	width: 0px;
