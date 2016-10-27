@@ -2,6 +2,7 @@
   "name": "math-random",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://circuslabs.net/~chris.silich/math.random",
   "devDependencies": {
     "react-scripts": "0.7.0"
   },
